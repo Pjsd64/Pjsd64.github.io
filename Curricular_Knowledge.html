@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyEd Supports Reference — SD64 CBIEP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink: #0f1214;
+    --ink-mid: #3a3f45;
+    --ink-soft: #6b7280;
+    --rule: #d1d5db;
+    --rule-light: #e9ebed;
+    --universal-bg: #eef6f0;
+    --universal-accent: #1a7a3c;
+    --universal-border: #a8d4b5;
+    --essential-bg: #edf2fb;
+    --essential-accent: #1d4ed8;
+    --essential-border: #a8bfef;
+    --tag-bg: #f3f4f6;
+    --tag-border: #d1d5db;
+    --white: #ffffff;
+    --page-bg: #f8f9fa;
+    --header-bg: #0f1214;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--header-bg);
+    color: #fff;
+    padding: 28px 40px 24px;
+    border-bottom: 3px solid var(--universal-accent);
+  }
+  .site-header .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 6px;
+  }
+  .site-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .site-header .subtitle {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 300;
+  }
+
+  /* ── AGENT NOTE ── */
+  .agent-note {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 40px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #78350f;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .support-section {
+    margin-bottom: 36px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid var(--rule);
+    background: var(--white);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  .support-section.universal { border-color: var(--universal-border); }
+  .support-section.essential { border-color: var(--essential-border); }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    padding: 16px 24px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .universal .section-header { background: var(--universal-bg); border-bottom: 1.5px solid var(--universal-border); }
+  .essential .section-header  { background: var(--essential-bg); border-bottom: 1.5px solid var(--essential-border); }
+
+  .section-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .universal .section-badge { background: var(--universal-accent); color: #fff; }
+  .essential .section-badge  { background: var(--essential-accent); color: #fff; }
+
+  .section-title-block h2 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .universal .section-title-block h2 { color: var(--universal-accent); }
+  .essential .section-title-block h2  { color: var(--essential-accent); }
+
+  .section-title-block p {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    font-weight: 300;
+  }
+
+  /* ── CATEGORY GRID ── */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0;
+  }
+
+  /* ── CATEGORY CELL ── */
+  .category-cell {
+    padding: 18px 22px;
+    border-right: 1px solid var(--rule-light);
+    border-bottom: 1px solid var(--rule-light);
+  }
+  .category-cell:nth-child(even) { background: #fcfcfd; }
+  .category-cell.full-width {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+
+  .category-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--rule-light);
+  }
+  .universal .category-name { color: var(--universal-accent); }
+  .essential .category-name  { color: var(--essential-accent); }
+
+  /* ── ITEM LIST ── */
+  .item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .item-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-mid);
+  }
+
+  .item-list li::before {
+    content: '—';
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--rule);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .item-list .label {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .item-list .note {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+  }
+
+  /* ── NOTES FOOTER ── */
+  .notes-footer {
+    background: #f9fafb;
+    border-top: 1.5px solid var(--rule-light);
+    padding: 14px 24px;
+  }
+  .notes-footer h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .notes-footer ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .notes-footer ul li {
+    font-size: 12px;
+    color: var(--ink-soft);
+    padding-left: 14px;
+    position: relative;
+  }
+  .notes-footer ul li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--ink-soft);
+  }
+
+  /* ── AGENT USAGE KEY ── */
+  .usage-key {
+    background: var(--white);
+    border: 1.5px solid var(--rule);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+  }
+  .usage-key h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .key-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .key-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--ink-mid);
+    line-height: 1.4;
+  }
+  .key-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .key-dot.universal { background: var(--universal-accent); }
+  .key-dot.essential { background: var(--essential-accent); }
+  .key-dot.note      { background: #f59e0b; }
+
+  @media (max-width: 640px) {
+    .site-header { padding: 20px; }
+    .main { padding: 20px 16px 40px; }
+    .key-grid { grid-template-columns: 1fr; }
+    .category-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="eyebrow">SD64 · CBIEP · MyEd Supports Reference</div>
+  <h1>Universal &amp; Essential Supports for Access</h1>
+  <p class="subtitle">MyEd dropdown labels for use in CBIEP Supports and Plans sections</p>
+</header>
+
+<div class="agent-note">
+  AGENT INSTRUCTION: When populating the Supports and Plans section, select labels verbatim from this document. Universal Classroom Supports = available to any student. Essential Supports = identified through psycho-educational and/or medical testing and necessary for curriculum access.
+</div>
+
+<main class="main">
+
+  <!-- USAGE KEY -->
+  <div class="usage-key">
+    <h2>How to use this reference</h2>
+    <div class="key-grid">
+      <div class="key-item"><span class="key-dot universal"></span><strong>Universal Classroom Supports</strong> — select only Technology and Environmental items for CBIEP. Available to any student; no assessment required.</div>
+      <div class="key-item"><span class="key-dot essential"></span><strong>Essential Supports</strong> — identified through psycho-educational and/or medical testing. Necessary for the student to access the curriculum.</div>
+      <div class="key-item"><span class="key-dot note"></span><strong>Bold labels</strong> in lists = exact MyEd dropdown text. Parenthetical text = examples/clarification only, not part of the label.</div>
+      <div class="key-item"><span class="key-dot note" style="background:#e5e7eb"></span>Universal first, Essential second. Supports are not people (EA support is not listed here).</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1: UNIVERSAL CLASSROOM SUPPORTS
+  ════════════════════════════════════════════ -->
+  <section class="support-section universal">
+
+    <div class="section-header">
+      <span class="section-badge">Universal</span>
+      <div class="section-title-block">
+        <h2>Universal Classroom Supports for Access</h2>
+        <p>Supports that could be made available to any student to foster greater inclusion in the classroom. For CBIEP, select Technology and Environmental items only.</p>
+      </div>
+    </div>
+
+    <div class="category-grid">
+
+      <!-- Assessment / Response -->
+      <div class="category-cell">
+        <div class="category-name">Assessment / Response</div>
+        <ul class="item-list">
+          <li><span><span class="label">Technology</span> <span class="note">*must specify (Text-to-speech, Speech-to-text)</span></span></li>
+          <li><span><span class="label">Alternatives to print</span> <span class="note">(audiobooks, movies, videos, digital media etc.)</span></span></li>
+          <li><span><span class="label">Oral instructions / reader</span></span></li>
+          <li><span>Use <span class="label">simplified language</span>/directions</span></li>
+          <li><span><span class="label">Sound field system</span> in the classroom</span></li>
+          <li><span><span class="label">Visual presentations of verbal material</span> <span class="note">(word webs, visual organizers)</span></span></li>
+          <li><span><span class="label">High-contrast materials</span> with minimal visual clutter</span></li>
+          <li><span><span class="label">Lesson outlines</span></span></li>
+          <li><span><span class="label">Alternate ways of responding</span> <span class="note">(oral, dictation, scribe, written, drawing, word processor, media etc.)</span></span></li>
+          <li><span><span class="label">Separate settings</span></span></li>
+          <li><span><span class="label">Additional time</span></span></li>
+          <li><span><span class="label">Graphic organizers</span>/Visual Supports</span></li>
+          <li><span>Use of a <span class="label">spelling dictionary</span>, etc.</span></li>
+          <li><span>Use of a <span class="label">calculator</span>, table of math facts, number line, manipulatives</span></li>
+          <li><span><span class="label">Alternatives to assessments</span> / essays <span class="note">(demonstrations, conferences, projects etc.)</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Scheduling -->
+      <div class="category-cell">
+        <div class="category-name">Scheduling</div>
+        <ul class="item-list">
+          <li><span><span class="label">Visual</span> classroom <span class="label">schedule</span></span></li>
+          <li><span><span class="label">Calendars</span> with special events</span></li>
+          <li><span><span class="label">Front-load schedule changes</span></span></li>
+          <li><span>Provide <span class="label">choice</span></span></li>
+          <li><span>Allow <span class="label">breaks</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Content / Process -->
+      <div class="category-cell">
+        <div class="category-name">Content / Process</div>
+        <ul class="item-list">
+          <li><span><span class="label">Reduce workload</span> <span class="note">(fewer questions, shorter assignments etc.)</span></span></li>
+          <li><span><span class="label">Reduce complexity</span> of content <span class="note">(more concrete, simplified vocabulary etc.)</span></span></li>
+          <li><span><span class="label">Increase complexity/abstractness</span> of content</span></li>
+          <li><span>Allow <span class="label">self-selected content/opportunities</span> to pursue individual interests</span></li>
+          <li><span><span class="label">Flexible pacing</span></span></li>
+          <li><span>Alternatives to <span class="label">note-taking</span> <span class="note">(scribe, audio recording, teacher notes provided, take a photo etc.)</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Self-Management / Organization -->
+      <div class="category-cell">
+        <div class="category-name">Self-Management / Organization</div>
+        <ul class="item-list">
+          <li><span><span class="label">Planner</span></span></li>
+          <li><span><span class="label">Work organization system</span> <span class="note">(colour coded files, binder etc.)</span></span></li>
+          <li><span><span class="label">Classroom visual</span> supports</span></li>
+        </ul>
+      </div>
+
+      <!-- Environmental -->
+      <div class="category-cell">
+        <div class="category-name">Environmental</div>
+        <ul class="item-list">
+          <li><span>Preferential / flexible <span class="label">seating</span></span></li>
+          <li><span>Special <span class="label">lighting</span> or <span class="label">acoustics</span></span></li>
+          <li><span><span class="label">Sound field system</span></span></li>
+          <li><span>Good <span class="label">sight lines</span> and placement and illumination to facilitate communication for oral and visual language</span></li>
+          <li><span><span class="label">Sensory tools</span> <span class="note">(fidget items, wiggle cushion, standing desks etc.)</span></span></li>
+          <li><span><span class="label">Ability to move</span> around indoor and outdoor spaces easily to access materials</span></li>
+          <li><span>Classroom zones/<span class="label">alternate work spaces</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Social-Emotional -->
+      <div class="category-cell">
+        <div class="category-name">Social-Emotional</div>
+        <ul class="item-list">
+          <li><span><span class="label">Calm space</span> in the classroom</span></li>
+          <li><span><span class="label">Check-ins</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Instructional and Presentation -->
+      <div class="category-cell">
+        <div class="category-name">Instructional and Presentation</div>
+        <ul class="item-list">
+          <li><span><span class="label">Text-to-speech</span> and <span class="label">Speech-to-text</span></span></li>
+          <li><span><span class="label">Alternatives to print</span> <span class="note">(audiobooks, movies, videos, digital media etc.)</span></span></li>
+          <li><span><span class="label">Oral instructions / reader</span></span></li>
+          <li><span>Use <span class="label">simplified language</span>/directions</span></li>
+          <li><span><span class="label">Sound field system</span> in the classroom</span></li>
+          <li><span><span class="label">Visual presentations</span> of verbal material <span class="note">(word webs, visual organizers)</span></span></li>
+          <li><span><span class="label">High-contrast materials</span> with minimal visual clutter</span></li>
+          <li><span><span class="label">Lesson outlines</span></span></li>
+          <li><span>Alternatives to <span class="label">note-taking</span> <span class="note">(scribe, audio recording, teacher notes provided, take a photo etc.)</span></span></li>
+          <li><span><span class="label">Provide captioning</span> <span class="note">(open and closed captioning)</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Timing -->
+      <div class="category-cell">
+        <div class="category-name">Timing</div>
+        <ul class="item-list">
+          <li><span><span class="label">Additional time</span> for tasks and assignments</span></li>
+          <li><span><span class="label">Additional time</span> to process oral information and directions</span></li>
+          <li><span>Use of a <span class="label">timer</span> <span class="note">(visual, auditory)</span> or countdown</span></li>
+        </ul>
+      </div>
+
+      <!-- Other -->
+      <div class="category-cell full-width">
+        <div class="category-name">Other</div>
+        <ul class="item-list">
+          <li><span><span class="note">Free text field — specify as needed</span></span></li>
+        </ul>
+      </div>
+
+    </div><!-- /category-grid -->
+
+  </section><!-- /universal -->
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2: ESSENTIAL SUPPORTS
+  ════════════════════════════════════════════ -->
+  <section class="support-section essential">
+
+    <div class="section-header">
+      <span class="section-badge">Essential</span>
+      <div class="section-title-block">
+        <h2>Essential Supports for Access</h2>
+        <p>Identified through psycho-educational and/or medical testing. Necessary for the student to access the curriculum.</p>
+      </div>
+    </div>
+
+    <div class="category-grid">
+
+      <!-- Assessment / Response -->
+      <div class="category-cell">
+        <div class="category-name">Assessment / Response</div>
+        <ul class="item-list">
+          <li><span><span class="label">Alternate formats</span> <span class="note">(Braille, specialized assistive technology)</span></span></li>
+          <li><span><span class="label">Alternative and Augmentative Communication Device</span> <span class="note">(Talking Board, PECS, Hip Talk, Big Mac, Step-by-Step, PODDS, Touch Chat, Proloquo2go, Lamp Words for Life, Let me Talk, Eye Gaze etc.)</span></span></li>
+          <li><span><span class="label">Signing</span></span></li>
+          <li><span>Assessment over <span class="label">several timed sessions</span></span></li>
+          <li><span>Hand held <span class="label">microphone</span> for RMT (Remote Microphone Technology)</span></li>
+        </ul>
+      </div>
+
+      <!-- Scheduling -->
+      <div class="category-cell">
+        <div class="category-name">Scheduling</div>
+        <ul class="item-list">
+          <li><span>Personal <span class="label">visual schedule</span></span></li>
+          <li><span>Work/Break <span class="label">schedule</span></span></li>
+          <li><span>Scheduled sensory/movement <span class="label">breaks</span></span></li>
+          <li><span><span class="label">Choice zone</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Content / Process -->
+      <div class="category-cell">
+        <div class="category-name">Content / Process</div>
+        <ul class="item-list">
+          <li><span><span class="label">Acceleration</span></span></li>
+          <li><span><span class="label">Interactions with peers who have similar ability</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Self-Management / Organization -->
+      <div class="category-cell">
+        <div class="category-name">Self-Management / Organization</div>
+        <ul class="item-list">
+          <li><span><span class="label">Work organization system</span> <span class="note">(basket system)</span></span></li>
+          <li><span>Personalized <span class="label">Visual or tactile supports</span></span></li>
+          <li><span>Learning <span class="label">Contract</span></span></li>
+          <li><span>Personal communication intent <span class="label">dictionary</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Environmental -->
+      <div class="category-cell">
+        <div class="category-name">Environmental</div>
+        <ul class="item-list">
+          <li><span><span class="label">Orientation and Mobility</span> Support <span class="note">(lift, walker, standing frame, cane, GPS etc.)</span></span></li>
+          <li><span>Specialized <span class="label">Seating</span> <span class="note">(Source of sound to stronger ear, individual wedges etc.)</span></span></li>
+          <li><span><span class="label">Alternative personal work space</span></span></li>
+          <li><span><span class="label">Specialized equipment</span> <span class="note">(Slant board, switch interface, Powerlink, audio hub etc.)</span></span></li>
+          <li><span>Positive Behaviour Support Plan <span class="note">(student safety plan)</span></span></li>
+          <li><span>Employee Risk Reduction Plan <span class="note">(employee safety plan)</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Social-Emotional -->
+      <div class="category-cell">
+        <div class="category-name">Social-Emotional</div>
+        <ul class="item-list">
+          <li><span><span class="label">Scheduled Check-ins</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Instructional and Presentation -->
+      <div class="category-cell">
+        <div class="category-name">Instructional and Presentation</div>
+        <ul class="item-list">
+          <li><span>Designated <span class="label">reader</span> or <span class="label">scribe</span></span></li>
+          <li><span>Personal <span class="label">hearing aid(s)</span></span></li>
+          <li><span>Personal <span class="label">FM/RMT</span> <span class="note">(Remote Microphone Technology)</span> system</span></li>
+          <li><span><span class="label">ASL Interpreter</span></span></li>
+          <li><span><span class="label">Alternative formats</span> <span class="note">(Braille, large print, auditory, specialized assistive technology)</span></span></li>
+          <li><span>Low <span class="label">vision tools</span> <span class="note">(monoculars and magnifiers)</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Timing -->
+      <div class="category-cell">
+        <div class="category-name">Timing</div>
+        <ul class="item-list">
+          <li><span>Personal <span class="label">countdown</span> script/visual timer</span></li>
+          <li><span>Personal <span class="label">visual timer</span></span></li>
+        </ul>
+      </div>
+
+      <!-- Other -->
+      <div class="category-cell full-width">
+        <div class="category-name">Other</div>
+        <ul class="item-list">
+          <li><span><span class="label">Service dog</span></span></li>
+        </ul>
+      </div>
+
+    </div><!-- /category-grid -->
+
+    <div class="notes-footer">
+      <h3>Agent notes — sourced from training document</h3>
+      <ul>
+        <li>Universal first, Essential second — only escalate to Essential when identified through assessment</li>
+        <li>Supports are not people — EA or staff support is not listed here and should not be entered as a support item</li>
+        <li>Choice – learning preferences – linked to supports (and to strategies)</li>
+        <li>Some categories are from CAST — inclusive practice based on needs, not domains</li>
+        <li>When writing goals and objectives, consider which supports may require explicit instruction</li>
+        <li>Strategies versus supports are distinct — do not conflate them in the CBIEP output</li>
+      </ul>
+    </div>
+
+  </section><!-- /essential -->
+
+</main>
+</body>
+</html>
