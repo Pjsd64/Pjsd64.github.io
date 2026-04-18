@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GISS CBIEP Planning Tool — Grade 8 Transition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink: #111318;
+    --ink-mid: #374151;
+    --ink-soft: #6b7280;
+    --page: #f5f4f0;
+    --white: #ffffff;
+    --rule: #e2e0d8;
+    --rule-light: #eeede8;
+
+    --giss-dark: #1a2744;
+    --giss-mid: #2d4a8a;
+    --giss-light: #eef1f9;
+    --giss-border: #b8c6e8;
+
+    --guardrail-bg: #fef9ec;
+    --guardrail-border: #f0c040;
+    --guardrail-text: #78450a;
+
+    --goal-bg: #f0faf4;
+    --goal-border: #7dcca0;
+    --goal-accent: #1a6e3f;
+
+    --support-bg: #f4f0fa;
+    --support-border: #b09de0;
+    --support-accent: #4a2d8a;
+
+    --tag-ps: #dbeafe;
+    --tag-ps-text: #1e40af;
+    --tag-th: #dcfce7;
+    --tag-th-text: #166534;
+    --tag-co: #fef3c7;
+    --tag-co-text: #92400e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--page);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--giss-dark);
+    padding: 32px 40px 28px;
+    border-bottom: 4px solid var(--giss-mid);
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7fa4d8;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .header-sub {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 300;
+  }
+  .header-meta {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    background: rgba(255,255,255,0.08);
+    color: #cbd5e1;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* ── AGENT INSTRUCTION BAR ── */
+  .agent-bar {
+    background: var(--giss-mid);
+    padding: 10px 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #dbeafe;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 36px 24px 72px;
+  }
+
+  /* ── SECTION BLOCKS ── */
+  .block {
+    background: var(--white);
+    border: 1.5px solid var(--rule);
+    border-radius: 10px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .block-header {
+    padding: 14px 22px 12px;
+    border-bottom: 1.5px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .block-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .badge-purpose  { background: var(--giss-dark); color: #fff; }
+  .badge-guardrail { background: var(--guardrail-border); color: var(--guardrail-text); }
+  .badge-patterns { background: var(--giss-mid); color: #fff; }
+  .badge-goal     { background: var(--goal-accent); color: #fff; }
+  .badge-supports { background: var(--support-accent); color: #fff; }
+
+  .block-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .block-body {
+    padding: 20px 22px;
+  }
+
+  /* ── PURPOSE ── */
+  .purpose-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  .purpose-col h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .purpose-col p {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+  .step-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .step-list li {
+    font-size: 13px;
+    color: var(--ink-mid);
+    padding-left: 18px;
+    position: relative;
+  }
+  .step-list li::before {
+    content: counter(step-counter);
+    counter-increment: step-counter;
+    position: absolute;
+    left: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--giss-mid);
+    font-weight: 500;
+    top: 2px;
+  }
+  .step-list { counter-reset: step-counter; }
+
+  /* ── GUARDRAILS ── */
+  .guardrail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .guardrail-card {
+    background: var(--guardrail-bg);
+    border: 1.5px solid var(--guardrail-border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .guardrail-card h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--guardrail-text);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--guardrail-border);
+  }
+  .guardrail-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .guardrail-card ul li {
+    font-size: 12.5px;
+    color: var(--ink-mid);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .guardrail-card ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--guardrail-border);
+    font-size: 10px;
+    top: 1px;
+  }
+  .guardrail-card ul li.no::before { content: '✗'; color: #e05a2b; }
+
+  /* ── MEASUREMENT TEMPLATE ── */
+  .measure-template {
+    background: #f8f9ff;
+    border: 1.5px solid #c7d2fe;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 12px;
+  }
+  .measure-template h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4338ca;
+    margin-bottom: 10px;
+  }
+  .measure-sentence {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .sentence-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #4338ca;
+    background: #e0e7ff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .sentence-text {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+  .sentence-text .fill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: #c7d2fe;
+    color: #3730a3;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .measure-options {
+    margin-top: 8px;
+    padding-left: 30px;
+  }
+  .measure-options span {
+    display: inline-block;
+    font-size: 11.5px;
+    background: #e0e7ff;
+    color: #3730a3;
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin: 2px 3px 2px 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── NEEDS PATTERNS ── */
+  .patterns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .pattern-chip {
+    background: var(--giss-light);
+    border: 1px solid var(--giss-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: var(--giss-dark);
+    line-height: 1.4;
+  }
+  .pattern-chip::before {
+    content: '→ ';
+    font-family: 'DM Mono', monospace;
+    color: var(--giss-mid);
+    font-size: 11px;
+  }
+
+  /* ── GOAL BANK ── */
+  .goal-entry {
+    background: var(--white);
+    border: 1.5px solid var(--goal-border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .goal-entry-header {
+    background: var(--goal-bg);
+    padding: 12px 20px;
+    border-bottom: 1.5px solid var(--goal-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .goal-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--goal-accent);
+    background: #d1fae5;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.1em;
+  }
+  .goal-entry-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--goal-accent);
+    flex: 1;
+  }
+  .competency-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  .tag-ps { background: var(--tag-ps); color: var(--tag-ps-text); }
+  .tag-th { background: var(--tag-th); color: var(--tag-th-text); }
+  .tag-co { background: var(--tag-co); color: var(--tag-co-text); }
+
+  .goal-entry-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .goal-cell {
+    padding: 16px 20px;
+    border-right: 1px solid var(--rule-light);
+    border-bottom: 1px solid var(--rule-light);
+  }
+  .goal-cell:nth-child(even) { border-right: none; }
+  .goal-cell.full { grid-column: 1 / -1; border-right: none; }
+  .goal-cell h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--goal-accent);
+    margin-bottom: 8px;
+  }
+  .goal-cell p, .goal-cell li {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.5;
+  }
+  .goal-statement {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink);
+    background: #f0faf4;
+    border-left: 3px solid var(--goal-accent);
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+  }
+  .strategies-col {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .strategies-col li {
+    font-size: 12.5px;
+    color: var(--ink-mid);
+    padding-left: 14px;
+    position: relative;
+  }
+  .strategies-col li::before {
+    content: '•';
+    position: absolute;
+    left: 4px;
+    color: var(--goal-border);
+  }
+  .strategies-col .who {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+    margin-top: 8px;
+    display: block;
+  }
+  .strategies-col .who:first-child { margin-top: 0; }
+
+  /* ── ESSENTIAL SUPPORTS ── */
+  .supports-category {
+    margin-bottom: 20px;
+  }
+  .supports-category:last-child { margin-bottom: 0; }
+  .supports-cat-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--support-accent);
+    padding: 8px 0 8px;
+    border-bottom: 1.5px solid var(--support-border);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .supports-cat-header::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--support-accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .supports-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .supports-list li {
+    font-size: 13px;
+    color: var(--ink-mid);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .supports-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--support-border);
+  }
+  .supports-list li .label {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── UTILITY ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .section-intro {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  @media (max-width: 680px) {
+    .header { padding: 20px; }
+    .agent-bar { padding: 10px 20px; }
+    .main { padding: 20px 16px 48px; }
+    .purpose-grid, .two-col, .goal-entry-body { grid-template-columns: 1fr; }
+    .goal-cell { border-right: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-eyebrow">SD64 · GISS · CBIEP Knowledge Source</div>
+  <h1>Grade 8 Transition CBIEP Planning Tool</h1>
+  <p class="header-sub">Best practice framework for students transitioning from elementary to secondary requiring significant support</p>
+  <div class="header-meta">
+    <span class="meta-pill">Grade 7 → 8 Transition</span>
+    <span class="meta-pill">BC Core Competencies</span>
+    <span class="meta-pill">4-Block Schedule Context</span>
+    <span class="meta-pill">Copy-paste Ready Output</span>
+    <span class="meta-pill">2026-04-02</span>
+  </div>
+</header>
+
+<div class="agent-bar">
+  AGENT INSTRUCTION: This document is your primary knowledge source for GISS Grade 8 CBIEP generation. Use the Goal Bank entries as foundations, personalise with teacher-provided student information, and select Essential Supports verbatim from the list at the end. All guardrails are non-negotiable.
+</div>
+
+<main class="main">
+
+  <!-- ═══════════ PURPOSE ═══════════ -->
+  <div class="block">
+    <div class="block-header">
+      <span class="block-badge badge-purpose">Purpose</span>
+      <span class="block-title">About This Document</span>
+    </div>
+    <div class="block-body">
+      <div class="purpose-grid">
+        <div class="purpose-col">
+          <h3>What this document does</h3>
+          <p>Provides a shared, consistent framework for writing meaningful CBIEP goals for students transitioning into Grade 8. It reduces workload for feeder teachers, improves IEP usefulness for secondary staff, and aligns practices with established GISS CBIEP language and expectations.</p>
+          <p style="margin-top:10px"><strong>Teachers describe the student. The agent writes the goals.</strong> Teachers are not expected to write goal language — they provide anecdotal, descriptive information about the student as a learner.</p>
+        </div>
+        <div class="purpose-col">
+          <h3>How to use this tool</h3>
+          <ol class="step-list">
+            <li>Provide a description of the student's strengths, needs, learning barriers, and what has helped in the past</li>
+            <li>Include anecdotal information for the rationale: how the student experiences learning, interacts with others, and responds to stressors</li>
+            <li>The agent generates: Goal · Rationale · Objective · Strategies · Measurement · Essential Supports</li>
+            <li>Review the output and request any adjustments</li>
+            <li>Copy and paste directly into the IEP</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ GUARDRAILS ═══════════ -->
+  <div class="block">
+    <div class="block-header">
+      <span class="block-badge badge-guardrail">Non-Negotiable</span>
+      <span class="block-title">Guardrails — Apply to Every Section of Every Goal</span>
+    </div>
+    <div class="block-body">
+      <div class="guardrail-grid">
+
+        <div class="guardrail-card">
+          <h3>Language &amp; Framing</h3>
+          <ul>
+            <li>Strength-based and asset-oriented language</li>
+            <li>Reflective and respectful tone — always strengthen student dignity</li>
+            <li>Growth-focused, not productivity- or compliance-focused</li>
+            <li>Inclusive and dignity-preserving language</li>
+            <li class="no">No timelines or deadline language</li>
+            <li class="no">No diagnostic or medical terminology</li>
+          </ul>
+        </div>
+
+        <div class="guardrail-card">
+          <h3>Rationale Rules</h3>
+          <ul>
+            <li>Goal Bank rationale = foundation only, not final output</li>
+            <li>Must be expanded using teacher-provided student information</li>
+            <li>Minimum 4–5 sentences using the student's name</li>
+            <li>Reference student's strengths, interests, or preferences</li>
+            <li>Describe how the access need shows up in learning contexts</li>
+            <li>Explain why the goal supports engagement, access, and wellbeing</li>
+          </ul>
+        </div>
+
+        <div class="guardrail-card">
+          <h3>Objective Rules</h3>
+          <ul>
+            <li>Use "I can" statements</li>
+            <li>Name one concrete, specific strategy — not a category</li>
+            <li>If organizational: name a specific Microsoft suite tool</li>
+            <li>If regulation: name one concrete classroom-appropriate strategy</li>
+            <li class="no">No vague generalizations ("agreed-upon strategy/system")</li>
+            <li class="no">No category labels instead of actual strategies</li>
+          </ul>
+        </div>
+
+        <div class="guardrail-card">
+          <h3>Strategies Rules</h3>
+          <ul>
+            <li>Written for secondary teachers in a 4-block-per-day schedule</li>
+            <li>Elaborate on the concrete strategy named in the objective</li>
+            <li>Include easy-to-follow guidelines for teaching, implementing, monitoring</li>
+            <li>Check-ins must be described as unobtrusive</li>
+            <li>Be practical and specific to the secondary context</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Measurement Template -->
+      <div class="measure-template">
+        <h3>Measurement — Required Three-Sentence Structure</h3>
+        <div class="measure-sentence">
+          <div class="sentence-num">1</div>
+          <div class="sentence-text">
+            "We will know that <span class="fill">[student name]</span> has met this objective when the student reports <span class="fill">[specific growth in the area of the objective]</span>."
+          </div>
+        </div>
+        <div class="measure-sentence">
+          <div class="sentence-num">2</div>
+          <div class="sentence-text">
+            "Progress will be measured through <span class="fill">[one or more means below]</span>."
+            <div class="measure-options">
+              <span>teacher observation</span>
+              <span>report cards</span>
+              <span>attendance</span>
+              <span>student feedback</span>
+              <span>feedback from supporting adults</span>
+              <span>other meaningful measures</span>
+            </div>
+          </div>
+        </div>
+        <div class="measure-sentence">
+          <div class="sentence-num">3</div>
+          <div class="sentence-text">
+            "Triangulated evidence regarding progress towards this objective will be recorded in the <strong>GISS CBIEP Feedback database</strong>."
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ CORE NEEDS PATTERNS ═══════════ -->
+  <div class="block">
+    <div class="block-header">
+      <span class="block-badge badge-patterns">Context</span>
+      <span class="block-title">Core Grade 8 Needs Patterns Informing the Goal Bank</span>
+    </div>
+    <div class="block-body">
+      <p class="section-intro">Analysis of CBIEP goals and rationales shows Grade 8 students commonly need support in these areas. Each pattern represents an access issue, not a diagnosis.</p>
+      <div class="patterns-grid">
+        <div class="pattern-chip">Accessing learning when expectations are unclear or open-ended</div>
+        <div class="pattern-chip">Initiating tasks and maintaining engagement</div>
+        <div class="pattern-chip">Managing executive function demands across multiple classes</div>
+        <div class="pattern-chip">Regulating emotional and cognitive load in busy environments</div>
+        <div class="pattern-chip">Building independence without withdrawing supports</div>
+        <div class="pattern-chip">Participating in collaborative learning</div>
+        <div class="pattern-chip">Developing confidence and willingness to take learning risks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ GOAL BANK ═══════════ -->
+  <div class="block">
+    <div class="block-header">
+      <span class="block-badge badge-goal">Goal Bank</span>
+      <span class="block-title">Grade 8 CBIEP Goal Bank — 7 Entries</span>
+    </div>
+    <div class="block-body" style="padding:16px 22px">
+      <p class="section-intro">Select the entries that best match the student's profile. Personalise all sections using teacher-provided information. Goal text must be used as written.</p>
+
+      <!-- ENTRY 1 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 1</span>
+          <span class="goal-entry-title">Accessing Learning Through Clarity and Communication</span>
+          <span class="competency-tag tag-ps">Personal &amp; Social</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can recognize my strengths and use strategies that help me access my learning and support my well-being.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Grade 8 classrooms are less predictable and more complex. Clear expectations and embedded strategies support engagement and understanding when learning feels unclear.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can recognize when instructions or tasks feel unclear and communicate what would help me get started.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Use clear, direct language when introducing tasks</li>
+              <li>Break tasks into manageable entry points</li>
+              <li>Provide models or examples</li>
+              <li>Check in unobtrusively</li>
+              <li>Normalize clarification</li>
+              <span class="who">The student will:</span>
+              <li>Notice when expectations feel unclear</li>
+              <li>Use language or tools to communicate needs</li>
+              <li>Reflect on helpful strategies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRY 2 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 2</span>
+          <span class="goal-entry-title">Task Initiation and Sustaining Engagement</span>
+          <span class="competency-tag tag-th">Thinking</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can approach learning tasks in ways that help me begin, continue, and complete my work.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Large or multi-step tasks can delay engagement. Structured entry points support persistence and access to learning.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can use step-by-step strategies to help me begin and continue my work.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Provide step lists</li>
+              <li>Support identification of a first step</li>
+              <li>Check in during work periods</li>
+              <li>Reinforce effort</li>
+              <span class="who">The student will:</span>
+              <li>Use steps to begin tasks</li>
+              <li>Communicate when steps feel unclear</li>
+              <li>Reflect on what helps sustain focus</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRY 3 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 3</span>
+          <span class="goal-entry-title">Managing Executive Function Demands</span>
+          <span class="competency-tag tag-th">Thinking</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can organize my learning and use strategies that help me manage multiple tasks and expectations.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Multiple classes and routines increase cognitive load. Organizational strategies support clarity and confidence.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can use organizational strategies to keep track of my learning and next steps.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Chunk information</li>
+              <li>Support prioritization</li>
+              <li>Use visual or written planning tools</li>
+              <li>Check in around next steps</li>
+              <span class="who">The student will:</span>
+              <li>Use tools to track tasks</li>
+              <li>Communicate when expectations feel hard to manage</li>
+              <li>Reflect on successful strategies</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRY 4 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 4</span>
+          <span class="goal-entry-title">Emotional Regulation for Learning Access</span>
+          <span class="competency-tag tag-ps">Personal &amp; Social</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can recognize how my feelings affect my learning and use strategies that help me stay engaged.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Busy environments increase cognitive and emotional load. Regulation strategies support access and well-being.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can notice when I am feeling overwhelmed and use strategies to re-engage.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Maintain predictable routines</li>
+              <li>Normalize regulation strategies</li>
+              <li>Offer quiet check-ins or space</li>
+              <span class="who">The student will:</span>
+              <li>Notice signs of overwhelm</li>
+              <li>Use agreed-upon strategies</li>
+              <li>Reflect on what helps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRY 5 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 5</span>
+          <span class="goal-entry-title">Developing Independence While Maintaining Supports</span>
+          <span class="competency-tag tag-ps">Personal &amp; Social</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can take part in my learning in ways that help me grow in independence while using strategies that work for me.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Independence does not require removal of supports. Embedded strategies maintain access and confidence.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can use strategies and supports that help me participate and make progress.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Embed supports into routines</li>
+              <li>Normalize strategy use</li>
+              <li>Support gradual independence</li>
+              <span class="who">The student will:</span>
+              <li>Use available strategies</li>
+              <li>Reflect on supports that help participation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRY 6 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 6</span>
+          <span class="goal-entry-title">Participating in Learning with Peers</span>
+          <span class="competency-tag tag-co">Communication</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can participate in learning with others in ways that feel manageable and supportive.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Collaborative tasks increase social demands. Structured support enables participation and access.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can take part in collaborative learning using strategies that help me stay engaged.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Clarify roles and expectations</li>
+              <li>Provide structured entry points</li>
+              <li>Allow flexible participation</li>
+              <span class="who">The student will:</span>
+              <li>Use agreed strategies to engage</li>
+              <li>Communicate when collaboration feels challenging</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRY 7 -->
+      <div class="goal-entry">
+        <div class="goal-entry-header">
+          <span class="goal-num">ENTRY 7</span>
+          <span class="goal-entry-title">Building Confidence and Taking Learning Risks</span>
+          <span class="competency-tag tag-ps">Personal &amp; Social</span>
+        </div>
+        <div class="goal-entry-body">
+          <div class="goal-cell full">
+            <h4>Goal</h4>
+            <p class="goal-statement">I can approach learning with confidence and try strategies even when I am unsure.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Rationale</h4>
+            <p>Fear of mistakes can limit participation. Emphasizing growth supports engagement.</p>
+          </div>
+          <div class="goal-cell">
+            <h4>Foundation Objective</h4>
+            <p>I can attempt learning tasks using strategies even when I am not fully confident.</p>
+          </div>
+          <div class="goal-cell full">
+            <h4>Foundation Strategies</h4>
+            <ul class="strategies-col">
+              <span class="who">Supportive adults will:</span>
+              <li>Normalize mistakes as learning</li>
+              <li>Break tasks into smaller steps</li>
+              <li>Offer reassurance and feedback</li>
+              <span class="who">The student will:</span>
+              <li>Attempt tasks using strategies</li>
+              <li>Reflect on effort and progress</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ ESSENTIAL SUPPORTS ═══════════ -->
+  <div class="block">
+    <div class="block-header">
+      <span class="block-badge badge-supports">Essential Supports</span>
+      <span class="block-title">GISS Essential Supports — Select Verbatim by Category</span>
+    </div>
+    <div class="block-body">
+      <p class="section-intro">Select applicable items word-for-word. Organise by category in the output. Base selection on the full student profile and best practices from the BC Ministry of Education K-12 Reporting Order, Special Education Manual, BC Curriculum, inclusive education, and UDL.</p>
+
+      <div class="supports-category">
+        <div class="supports-cat-header">Assessment &amp; Response</div>
+        <ul class="supports-list">
+          <li>Extended time and/or reduced assessment volume without altering curricular intent</li>
+          <li>Flexible methods to demonstrate learning aligned with curricular competencies (e.g., oral, visual, digital, structured formats)</li>
+          <li>Use of triangulated assessment (observation, conversation, product) to determine learning progress</li>
+          <li>Assessments provided in digital format when available</li>
+          <li>Recognition-based assessment formats used when appropriate (e.g., multiple choice, matching, short response)</li>
+          <li>Assessments chunked into manageable sections</li>
+          <li>Access to a separate or quiet setting for assessments when required</li>
+          <li>Assistive technology permitted during assessments (e.g., text-to-speech, speech-to-text, spell check, calculator as appropriate)</li>
+          <li>Spelling, handwriting, and transcription errors not penalized unless directly assessed</li>
+          <li>Additional processing time provided before requiring responses</li>
+          <li>Alternatives to whole-class verbal responses (e.g., written, digital, individual check-in)</li>
+        </ul>
+      </div>
+
+      <div class="supports-category">
+        <div class="supports-cat-header">Content &amp; Learning Process</div>
+        <ul class="supports-list">
+          <li>Instruction delivered in clear, manageable chunks with explicit transitions</li>
+          <li>Key content front-loaded through notes, outlines, exemplars, or preview materials</li>
+          <li>Explicit instruction paired with modelling, guided practice, and feedback</li>
+          <li>Reduced cognitive load during instruction (minimizing simultaneous listening, copying, and processing)</li>
+          <li>Access to notes, slide decks, or outlines to reduce note-taking demands</li>
+          <li>Use of visual supports (graphic organizers, step lists, worked examples, anchor charts)</li>
+          <li>Learning framed using big-picture concepts before focusing on detail</li>
+          <li>Opportunities for choice in learning activities and response formats</li>
+          <li>Structured supports for written output (pre-writing organizers, sentence starters, rubrics, exemplars)</li>
+          <li>Reduced reading demands and/or alternate access to content (audio, video, summaries) when appropriate</li>
+          <li>Explicit support interpreting graphs, charts, diagrams, and symbolic representations</li>
+          <li>Multisensory learning opportunities (visual, verbal, hands-on, digital)</li>
+          <li>Ongoing formative feedback to support progress and reduce anxiety</li>
+        </ul>
+      </div>
+
+      <div class="supports-category">
+        <div class="supports-cat-header">Self-Management &amp; Organization</div>
+        <ul class="supports-list">
+          <li>Clear expectations communicated both verbally and in writing</li>
+          <li>Large tasks and projects broken into explicit steps with interim deadlines</li>
+          <li>Use of checklists, planners, or digital tools to support task initiation and completion</li>
+          <li>Support with time management within a rotating block schedule</li>
+          <li>Reminders and check-ins related to deadlines and missing work</li>
+          <li>Support to organize materials (digital and/or physical)</li>
+          <li>Opportunities for movement and pacing, including short breaks as needed</li>
+          <li>Explicit instruction and coaching in executive functioning skills</li>
+          <li>Reduced simultaneous task demands (e.g., listening while writing or organizing)</li>
+        </ul>
+      </div>
+
+      <div class="supports-category">
+        <div class="supports-cat-header">Instruction &amp; Representation</div>
+        <ul class="supports-list">
+          <li>Clear, concise instructions using consistent and straightforward language</li>
+          <li>Information presented using multiple representations (visual, verbal, written, modelled)</li>
+          <li>Big-picture frameworks introduced before complex or abstract detail</li>
+          <li>Key instructions repeated and paraphrased as needed</li>
+          <li>Modelling and worked examples provided before independent practice</li>
+          <li>Visual supports used for abstract or language-heavy concepts</li>
+          <li>Frequent, unobtrusive checks for understanding</li>
+        </ul>
+      </div>
+
+      <div class="supports-category">
+        <div class="supports-cat-header">Social &amp; Emotional Supports</div>
+        <ul class="supports-list">
+          <li>Classroom environment that normalizes mistakes as part of learning</li>
+          <li>Predictable routines and clear expectations across learning contexts</li>
+          <li>Positive reinforcement focused on effort, strategy use, and progress</li>
+          <li>Environmental adjustments (e.g., preferential seating) to reduce distraction</li>
+          <li>Opportunities for student self-reflection and goal-setting</li>
+          <li>Access to calming strategies during independent work as needed</li>
+          <li>Coordinated communication among staff when concerns arise</li>
+        </ul>
+      </div>
+
+      <div class="supports-category">
+        <div class="supports-cat-header">Technology &amp; Accessibility</div>
+        <ul class="supports-list">
+          <li>Access to assistive technology as required (text-to-speech, speech-to-text, spell check, calculator)</li>
+          <li>Use of computer or personal device for written work</li>
+          <li>Learning materials provided in accessible digital formats when possible</li>
+          <li>Digital submission of assignments when appropriate</li>
+          <li>Access to Ministry-approved resources (e.g., ARCBC) when applicable</li>
+          <li>Consistent use of school-wide learning platforms to support organization</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
